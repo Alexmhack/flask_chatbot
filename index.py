@@ -12,5 +12,27 @@ def index():
 	return render_template('index.html')
 
 
+@app.route('/get-movie-details', methods=['POST'])
+def get_movie_detail():
+	data = request.get_json(silent=True)
+	movie = data['queryResult']['parameters']['moive']
+	api_key = os.getenv('OMDB_API_KEY')
+
+	movie_detail = requests.get('http://www.omdbapi.com/?t={0}&apikey={1}'.format(movie, api_key))
+	movie_detail = json.loads(movie_detail)
+	response = """
+		Title : {0}
+		Released: {1}
+		Actors: {2}
+		Plot: {3}
+	""".format(movie_detail['Title'], movie_detail['Released'], movie_detail['Actors'], movie_detail['Plot'])
+
+	reply = {
+		'fulfillmentText': response
+	}
+
+	return jsonify(reply)
+
+
 if __name__ == '__main__':
 	app.run()
