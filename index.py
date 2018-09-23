@@ -1,9 +1,13 @@
-from flask import Flask, request, jsonify, render_template
 import os
 import dialogflow
 import requests
 import json
 import pusher
+
+from flask import Flask, request, jsonify, render_template
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 app = Flask(__name__)
 
