@@ -69,6 +69,10 @@ def send_message():
 	project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
 	fulfillment_text = detect_intent_texts(project_id, "unique", message, 'en')
 	response_text = {"message": fulfillment_text}
+	socketId = request.form['socketId']
+	pusher_client.trigger('movie_bot', 'new_message',
+		{'human_message': message, 'bot_message': fulfillment_text},
+		socketId)
 
 	return jsonify(response_text)
 
