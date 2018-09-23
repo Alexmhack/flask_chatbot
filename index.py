@@ -48,5 +48,15 @@ def detect_intent_texts(project_id, session_id, text, language_code):
 		return response.query_result.fulfillment_text
 
 
+@app.route('/send_message', methods=['POST'])
+def send_message():
+	message = request.form['message']
+	project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
+	fulfillment_text = detect_intent_texts(project_id, "unique", message, 'en')
+	response_text = {"message": fulfillment_text}
+
+	return jsonify(response_text)
+
+
 if __name__ == '__main__':
 	app.run()
