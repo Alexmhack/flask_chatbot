@@ -7,16 +7,19 @@ import pusher
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv, find_dotenv
 
-# initialize Pusher
-pusher_client = pusher.Pusher(
-    app_id=os.getenv('PUSHER_APP_ID'),
-    key=os.getenv('PUSHER_KEY'),
-    secret=os.getenv('PUSHER_SECRET'),
-    cluster=os.getenv('PUSHER_CLUSTER'),
-    ssl=True)
-    
 load_dotenv(find_dotenv())
 
+key = os.getenv("PUSHER_APP_CLUSTER")
+print(f"Pusher KEY: {key}")
+
+# initialize Pusher
+pusher_client = pusher.Pusher(
+	app_id=os.getenv('PUSHER_APP_ID'),
+	key=os.getenv('PUSHER_APP_KEY'),
+	secret=os.getenv('PUSHER_APP_SECRET'),
+	cluster=os.getenv('PUSHER_APP_CLUSTER'),
+	ssl=True)
+	
 app = Flask(__name__)
 
 @app.route('/')
