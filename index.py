@@ -9,9 +9,6 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-key = os.getenv("PUSHER_APP_CLUSTER")
-print(f"Pusher KEY: {key}")
-
 # initialize Pusher
 pusher_client = pusher.Pusher(
 	app_id=os.getenv('PUSHER_APP_ID'),
