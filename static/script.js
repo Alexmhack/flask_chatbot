@@ -1,14 +1,48 @@
+// Initialize Pusher
+const pusher = new Pusher('0cbe70dafa641d9765d9', {
+    cluster: 'ap2',
+    forceTLS: true
+});
+
+// Subscribe to movie_bot channel
+const channel = pusher.subscribe('movie_bot');
+
+  // bind new_message event to movie_bot channel
+  channel.bind('new_message', function(data) {
+
+   // Append human message
+    $('.chat-container').append(`
+        <div class="chat-message col-md-5 human-message">
+            ${data.human_message}
+        </div>
+    `)
+
+    // Append bot message
+    $('.chat-container').append(`
+        <div class="chat-message col-md-5 offset-md-7 bot-message">
+            ${data.bot_message}
+        </div>
+    `)
+});
+
 function submitMessage(message) {
-	$.post("/send_message", {message: message}, handle_response);
+	console.log("SUBMIT MESSAGE IS CALLED...");
+	$.post("/send_message", {
+		message: message,
+		// socketId: pusher.connections.socket_id
+	}).done(function (data) {
+		alert(data);
+	});
 
 	function handle_response(data) {
+		console.log("HANDLE RESPONSE IS CALLED...");
 		$('.chat-container').append(`
 		    <div class="chat-message col-md-5 offset-md-7 bot-message">
 		        ${data.message}
 		    </div>
 		`)
 		// remove the loading indicator
-		$( "#loading" ).remove();
+		$("#loading").remove();
 	}
 }
 
@@ -35,5 +69,5 @@ $("#target").on('submit', function(e) {
 	$('#input_message').val('')
 
     // send the message
-	submit_message(input_message)
+	submitMessage(input_message)
 })
